@@ -11,7 +11,7 @@
 #import "Snake.h"
 
 #define LEVELCOUNT 10   //多少分为1级
-#define MAXLEVEL 18     //最高多少级
+#define MAXLEVEL 9     //最高多少级
 
 @interface ViewController ()<UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet GameView *gameView;
@@ -112,7 +112,7 @@
 }
 
 - (IBAction)btnClick:(UIButton *)sender {
-    self.snake.direction = (MoveDirection)sender.tag;
+    if (_startBtn.selected) self.snake.direction = (MoveDirection)sender.tag;
 }
 
 - (IBAction)pause:(UIButton *)sender {

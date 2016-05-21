@@ -51,7 +51,7 @@
 }
 
 - (void)start {
-    float time = 0.2 - _speed * 0.01;
+    float time = 0.2 - _speed * 0.02;
     self.timer = [NSTimer scheduledTimerWithTimeInterval:time target:self selector:@selector(move) userInfo:nil repeats:YES];
 }
 
