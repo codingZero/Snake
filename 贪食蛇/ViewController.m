@@ -9,18 +9,25 @@
 #import "ViewController.h"
 #import "GameView.h"
 #import "Snake.h"
+
+#define LEVELCOUNT 10   //多少分为1级
+#define MAXLEVEL 18     //最高多少级
+
 @interface ViewController ()<UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet GameView *gameView;
 @property (nonatomic, strong) Snake *snake;
+@property (weak, nonatomic) IBOutlet UIButton *startBtn;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
+@property (weak, nonatomic) IBOutlet UILabel *levelLabel;
 @property (nonatomic, strong) UIImageView *food;
+@property (nonatomic, assign) BOOL isGameOver;
 @end
 
 @implementation ViewController
 
 - (UIImageView *)food {
     if (!_food) {
-        _food = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
+        _food = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, NODEWH, NODEWH)];
         _food.image = [UIImage imageNamed:@"icon_星星2"];
         [_gameView addSubview:_food];
     }
@@ -41,8 +48,6 @@
     [self createFood];
 }
 
-
-
 - (void)createFood {
     int x = (arc4random() % 20) * NODEWH + NODEWH * 0.5;
     int y = (arc4random() % 30) * NODEWH + NODEWH * 0.5;
@@ -59,7 +64,13 @@
 
 - (void)isEatedFood {
     if (CGPointEqualToPoint(_food.center, _snake.nodes.firstObject.coordinate)) {
-        _scoreLabel.text = [NSString stringWithFormat:@"%d", _scoreLabel.text.intValue + 1];
+        NSInteger score = _scoreLabel.text.intValue + 1;
+        _scoreLabel.text = [NSString stringWithFormat:@"%ld", score];
+        if (score <= LEVELCOUNT * MAXLEVEL && (score % LEVELCOUNT == 0)){
+             NSInteger level = score / LEVELCOUNT;
+             [_snake levelUpWithSpeed:level];
+            _levelLabel.text = [NSString stringWithFormat:@"%ld", level];
+        }
         [self createFood];
         [_snake growUp];
     }
@@ -83,12 +94,18 @@
 
 - (void)gameOver {
     [_snake pause];
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"游戏结束" message:@"是否重新开始？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"重新开始", nil];
+    NSString *message = [NSString stringWithFormat:@"总得分：%@，不服再来？", _scoreLabel.text];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Game Over" message:message delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"不服", nil];
     [alertView show];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 1) {
+    if (buttonIndex == 0) {
+        _startBtn.selected = NO;
+        _isGameOver = YES;
+    } else {
+        _scoreLabel.text = @"0";
+        _levelLabel.text = @"0";
         [self createFood];
         [_snake reset];
     }
@@ -102,7 +119,14 @@
     if (sender.selected) {
         [_snake pause];
     } else {
-        [_snake start];
+        if (_isGameOver) {
+            _scoreLabel.text = @"0";
+            _levelLabel.text = @"0";
+            [_snake reset];
+            _isGameOver = NO;
+        } else {
+             [_snake start];
+        }
     }
     sender.selected = !sender.selected;
 }

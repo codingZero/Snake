@@ -10,6 +10,7 @@
 
 @interface Snake()
 @property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic, assign) NSInteger speed;
 @end
 
 @implementation Snake
@@ -30,19 +31,28 @@
 - (void)initBody {
     [self.nodes removeAllObjects];
     for (int i = 4; i >= 0; i--) {
-        CGPoint point = CGPointMake(5 + 10 * i, 5);
+        CGPoint point = CGPointMake(NODEWH * (i + 0.5), NODEWH * 0.5);
         [self.nodes addObject:[Node nodeWithCoordinate:point]];
     }
     _direction = MoveDirectionRight;
 }
 
+
+- (void)levelUpWithSpeed:(NSInteger)speed {
+    _speed = speed;
+    [self pause];
+    [self start];
+}
+
 - (void)reset {
     [self initBody];
+    _speed = 0;
     [self start];
 }
 
 - (void)start {
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(move) userInfo:nil repeats:YES];
+    float time = 0.2 - _speed * 0.01;
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:time target:self selector:@selector(move) userInfo:nil repeats:YES];
 }
 
 - (void)pause {
@@ -63,15 +73,15 @@
     CGPoint center;
     if (node1.coordinate.x == node2.coordinate.x) {
         if (node1.coordinate.y < node2.coordinate.y) {
-            center = CGPointMake(node1.coordinate.x, node1.coordinate.y - 10);
+            center = CGPointMake(node1.coordinate.x, node1.coordinate.y - NODEWH);
         } else {
-            center = CGPointMake(node1.coordinate.x, node1.coordinate.y + 10);
+            center = CGPointMake(node1.coordinate.x, node1.coordinate.y + NODEWH);
         }
     } else if (node1.coordinate.y == node2.coordinate.y) {
         if (node1.coordinate.x < node2.coordinate.x) {
-            center = CGPointMake(node1.coordinate.x - 10, node1.coordinate.y);
+            center = CGPointMake(node1.coordinate.x - NODEWH, node1.coordinate.y);
         } else {
-            center = CGPointMake(node1.coordinate.x + 10, node1.coordinate.y);
+            center = CGPointMake(node1.coordinate.x + NODEWH, node1.coordinate.y);
         }
     }
     Node *node = [Node nodeWithCoordinate:center];
@@ -83,16 +93,16 @@
     CGPoint center = _nodes.firstObject.coordinate;
     switch (_direction) {
         case MoveDirectionUp:
-            center.y -= 10;
+            center.y -= NODEWH;
             break;
         case MoveDirectionLeft:
-            center.x -= 10;
+            center.x -= NODEWH;
             break;
         case MoveDirectionDown:
-            center.y += 10;
+            center.y += NODEWH;
             break;
         case MoveDirectionRight:
-            center.x += 10;
+            center.x += NODEWH;
             break;
     }
     node.coordinate = center;

@@ -32,26 +32,27 @@
 }
 
 - (void)drawHead:(UIBezierPath *)bezierPath center:(CGPoint)center {
+    CGFloat halfW = NODEWH * 0.5;
     switch (_snake.direction) {
         case MoveDirectionRight:
-            [bezierPath moveToPoint:CGPointMake(center.x - 5, center.y - 5)];
-            [bezierPath addLineToPoint:CGPointMake(center.x - 5, center.y + 5)];
-            [bezierPath addLineToPoint:CGPointMake(center.x + 5, center.y)];
+            [bezierPath moveToPoint:CGPointMake(center.x - halfW, center.y - halfW)];
+            [bezierPath addLineToPoint:CGPointMake(center.x - halfW, center.y + halfW)];
+            [bezierPath addLineToPoint:CGPointMake(center.x + halfW, center.y)];
             break;
         case MoveDirectionLeft:
-            [bezierPath moveToPoint:CGPointMake(center.x - 5, center.y)];
-            [bezierPath addLineToPoint:CGPointMake(center.x + 5, center.y + 5)];
-            [bezierPath addLineToPoint:CGPointMake(center.x + 5, center.y - 5)];
+            [bezierPath moveToPoint:CGPointMake(center.x - halfW, center.y)];
+            [bezierPath addLineToPoint:CGPointMake(center.x + halfW, center.y + halfW)];
+            [bezierPath addLineToPoint:CGPointMake(center.x + halfW, center.y - halfW)];
             break;
         case MoveDirectionDown:
-            [bezierPath moveToPoint:CGPointMake(center.x - 5, center.y - 5)];
-            [bezierPath addLineToPoint:CGPointMake(center.x + 5, center.y - 5)];
-            [bezierPath addLineToPoint:CGPointMake(center.x, center.y + 5)];
+            [bezierPath moveToPoint:CGPointMake(center.x - halfW, center.y - halfW)];
+            [bezierPath addLineToPoint:CGPointMake(center.x + halfW, center.y - halfW)];
+            [bezierPath addLineToPoint:CGPointMake(center.x, center.y + halfW)];
             break;
         case MoveDirectionUp:
-            [bezierPath moveToPoint:CGPointMake(center.x, center.y - 5)];
-            [bezierPath addLineToPoint:CGPointMake(center.x - 5, center.y + 5)];
-            [bezierPath addLineToPoint:CGPointMake(center.x + 5, center.y + 5)];
+            [bezierPath moveToPoint:CGPointMake(center.x, center.y - halfW)];
+            [bezierPath addLineToPoint:CGPointMake(center.x - halfW, center.y + halfW)];
+            [bezierPath addLineToPoint:CGPointMake(center.x + halfW, center.y + halfW)];
             break;
         default:
             break;

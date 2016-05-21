@@ -20,6 +20,7 @@ typedef enum {
 @property (nonatomic, assign) MoveDirection direction;
 @property (nonatomic, strong) void(^moveFinishBlock)();
 + (instancetype)snake;
+- (void)levelUpWithSpeed:(NSInteger)speed;
 - (void)growUp;
 - (void)pause;
 - (void)start;
