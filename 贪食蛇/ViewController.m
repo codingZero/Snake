@@ -12,6 +12,7 @@
 @interface ViewController ()<UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet GameView *gameView;
 @property (nonatomic, strong) Snake *snake;
+@property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (nonatomic, strong) UIImageView *food;
 @end
 
@@ -43,8 +44,8 @@
 
 
 - (void)createFood {
-    int x = (arc4random() % 30) * NODEWH + NODEWH * 0.5;
-    int y = (arc4random() % 40) * NODEWH + NODEWH * 0.5;
+    int x = (arc4random() % 20) * NODEWH + NODEWH * 0.5;
+    int y = (arc4random() % 30) * NODEWH + NODEWH * 0.5;
     CGPoint center = CGPointMake(x, y);
     for (Node *node in _snake.nodes) {
         if (CGPointEqualToPoint(center, node.coordinate)) {
@@ -58,6 +59,7 @@
 
 - (void)isEatedFood {
     if (CGPointEqualToPoint(_food.center, _snake.nodes.firstObject.coordinate)) {
+        _scoreLabel.text = [NSString stringWithFormat:@"%d", _scoreLabel.text.intValue + 1];
         [self createFood];
         [_snake growUp];
     }
@@ -71,10 +73,10 @@
             [self gameOver];
         }
     }
-    if (head.coordinate.x < 5 || head.coordinate.x > 295) {
+    if (head.coordinate.x < 5 || head.coordinate.x > 195) {
         [self gameOver];
     }
-    if (head.coordinate.y < 5 || head.coordinate.y > 395) {
+    if (head.coordinate.y < 5 || head.coordinate.y > 295) {
         [self gameOver];
     }
 }

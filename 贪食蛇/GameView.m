@@ -15,15 +15,12 @@
 
 
 @implementation GameView
-
-
-
 - (void)drawRect:(CGRect)rect {
     if (!_snake.nodes.count) return;
     CGPoint center = _snake.nodes.firstObject.coordinate;
     UIBezierPath *bezierPath = [UIBezierPath bezierPath];
     [self drawHead:bezierPath center:center];
-    [[UIColor redColor] set];
+    [[UIColor purpleColor] set];
     [bezierPath setLineWidth:1];
     [bezierPath fill];
     for (int i = 1; i < _snake.nodes.count; i++) {
@@ -59,6 +56,12 @@
         default:
             break;
     }
+}
+
+
+- (void)awakeFromNib {
+    self.layer.borderWidth = 1;
+    self.layer.borderColor = [UIColor colorWithWhite:0 alpha:0.1].CGColor;
 }
 
 
