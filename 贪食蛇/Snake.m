@@ -11,6 +11,7 @@
 @interface Snake()
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, assign) NSInteger speed;
+@property (nonatomic, assign) CGPoint lastPoint;
 @end
 
 @implementation Snake
@@ -68,28 +69,13 @@
 }
 
 - (void)growUp {
-    Node *node1 = _nodes.lastObject;
-    Node *node2 = _nodes[_nodes.count - 2];
-    CGPoint center;
-    if (node1.coordinate.x == node2.coordinate.x) {
-        if (node1.coordinate.y < node2.coordinate.y) {
-            center = CGPointMake(node1.coordinate.x, node1.coordinate.y - NODEWH);
-        } else {
-            center = CGPointMake(node1.coordinate.x, node1.coordinate.y + NODEWH);
-        }
-    } else if (node1.coordinate.y == node2.coordinate.y) {
-        if (node1.coordinate.x < node2.coordinate.x) {
-            center = CGPointMake(node1.coordinate.x - NODEWH, node1.coordinate.y);
-        } else {
-            center = CGPointMake(node1.coordinate.x + NODEWH, node1.coordinate.y);
-        }
-    }
-    Node *node = [Node nodeWithCoordinate:center];
+    Node *node = [Node nodeWithCoordinate:_lastPoint];
     [_nodes addObject:node];
 }
 
 - (void)move {
     Node *node = _nodes.lastObject;
+    _lastPoint = node.coordinate;
     CGPoint center = _nodes.firstObject.coordinate;
     switch (_direction) {
         case MoveDirectionUp:
